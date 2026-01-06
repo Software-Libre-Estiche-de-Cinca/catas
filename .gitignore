@@ -1,0 +1,11 @@
+/target
+
+# Archivos de log
+/logs
+*.log
+
+# Archivos temporales de IDE
+/.idea
+
+# Archivos db
+*.db
