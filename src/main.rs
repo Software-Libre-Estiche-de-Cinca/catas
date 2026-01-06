@@ -31,7 +31,7 @@ async fn main() {
     let state = AppState { db: pool };
     info!("Base de datos inicializada correctamente");
 
-    // Si no hay errores, continuar con el servidor 
+    // Si no hay errores, continuar con el servidor
     let app = routes::create_routes(state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
