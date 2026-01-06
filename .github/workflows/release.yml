@@ -66,6 +66,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
+          merge-multiple: true
 
       - name: Create tag metadata
         shell: bash
@@ -80,7 +81,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          gh release create "$TAG" dist/** \
+          gh release create "$TAG" dist/* \
             --title "$TITLE" \
             --notes "Automated release from commit $GITHUB_SHA" \
             --prerelease
