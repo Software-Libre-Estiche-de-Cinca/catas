@@ -1,0 +1,59 @@
+name: Rust CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  fmt:
+    name: cargo fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: rustfmt (check)
+        run: cargo fmt --all --check
+
+  check:
+    name: cargo check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo check
+        run: cargo check --all-targets --all-features
+
+  clippy:
+    name: cargo clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: clippy (deny warnings)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  # Job "agregador" (recomendado) para tener un único check requerido estable
+  ci-success:
+    name: ci-success
+    runs-on: ubuntu-latest
+    needs: [ fmt, check, clippy ]
+    if: ${{ always() }}
+    steps:
+      - name: Report
+        run: |
+          test "${{ needs.fmt.result }}" = "success"
+          test "${{ needs.check.result }}" = "success"
+          test "${{ needs.clippy.result }}" = "success"
+          echo "All CI checks passed."
