@@ -1,6 +1,18 @@
 mod db;
-mod handlers;
+mod handlers {
+    pub mod health;
+    pub mod users {
+        pub mod login;
+    }
+
+    pub use health::health;
+}
 mod logger;
+mod models {
+    pub mod users {
+        pub mod login;
+    }
+}
 mod routes;
 
 use crate::db::DbPool;

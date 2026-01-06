@@ -1,4 +1,6 @@
-use crate::{handlers, AppState};
+use crate::handlers::health;
+use crate::handlers::users::login as user_login;
+use crate::AppState;
 use axum::routing::post;
 use axum::{routing::get, Router};
 use tracing::debug;
@@ -9,9 +11,8 @@ use utoipa_swagger_ui::SwaggerUi;
 #[derive(OpenApi)]
 #[openapi(
     paths(
-        handlers::hello_world,
-        handlers::health,
-        handlers::login
+        health::health,
+        user_login::login
     ),
     tags(
         (name = "api", description = "API endpoints")
@@ -26,9 +27,8 @@ pub fn create_routes(app_state: AppState) -> Router {
     let openapi = ApiDoc::openapi();
 
     Router::new()
-        .route("/{name}", get(handlers::hello_world))
-        .route("/health", get(handlers::health))
-        .route("/login", post(handlers::login))
+        .route("/health", get(health::health))
+        .route("/login", post(user_login::login))
         // Añadir SwaggerUI en /swagger-ui
         .merge(SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", openapi))
         .with_state(app_state)
