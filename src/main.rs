@@ -14,7 +14,7 @@ pub struct AppState {
 
 #[tokio::main]
 async fn main() {
-    // Inicializar el sistema de logging
+    // Inicializar el sistema de logging 
     logger::init_logger();
 
     info!("Iniciando aplicación de Catas");
