@@ -14,7 +14,7 @@ pub struct AppState {
 
 #[tokio::main]
 async fn main() {
-    // Inicializar el sistema de logging 
+    // Inicializar el sistema de logging
     logger::init_logger();
 
     info!("Iniciando aplicación de Catas");
@@ -34,9 +34,7 @@ async fn main() {
     // Si no hay errores, continuar con el servidor
     let app = routes::create_routes(state);
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
 
     info!("Servidor escuchando en http://127.0.0.1:3000");
 
